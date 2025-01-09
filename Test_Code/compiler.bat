@@ -1,0 +1,1 @@
+pyinstaller --onefile --exclude-module tkinter perfil_levas.py
