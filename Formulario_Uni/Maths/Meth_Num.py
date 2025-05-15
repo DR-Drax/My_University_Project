@@ -1,5 +1,11 @@
-import sympy as sp
+import matplotlib
+matplotlib.use('TkAgg')  # Force interactive backend before other imports
 import matplotlib.pyplot as plt
+import sympy as sp
+# Rest of your imports...
+
+#import sympy as sp
+#import matplotlib.pyplot as plt
 import re  # Necesario para trabajar con expresiones regulares
 
 # Definir las variables simbólicas
@@ -248,8 +254,9 @@ def menu_Numeric(equation_text, MinX, MaxX, h, xi, yi, Type):
      # Graficar resultados
     graficar_tablas_unificada(table, metodo_nombre)
 
+
 #menu_Numeric("y*x³-1.1y",0,2,.2,0,1,4)
-#menu_Numeric("x-y + 1",0,1,.1,0,1,5)
+#menu_Numeric("x-y + 1",0,1,.1,0,1,3)
 #menu_Numeric("e^(-x) + x*e^(-x)",0,1,.1,0,1,1)
 #menu_Numeric("-2x³+12x²-20x+8.5",0,2,.5,0,1,4)
 

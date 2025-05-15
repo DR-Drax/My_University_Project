@@ -8,6 +8,9 @@ from System_User.PySisteam import *
 #__________Formulario Physics_____#
 from Formulario_Uni.Fisica.Ondas import *
 
+#_____Cinematica de mecanismos____#
+from Cinematica_Mecanismos.Perfil_Levas import *
+
 #__________Probablidad________#
 from Formulario_Uni.Probabilidad_Estadistica import *
 
@@ -29,7 +32,7 @@ def Continue():
     """
     print("\nDo you want do another exercise")
     opt = CheckIOp(1, 2,Style_Menu(["Yes","No"]))
-    return opt == 1
+    return opt == 1 
 
 # Pendiente de revison
 def Probabilidad(TextHistory,imageHistory):
@@ -207,6 +210,112 @@ def Fisica(TextHistory,imageHistory):
 
     return flag,TextHistory,imageHistory
 
+def Cinematica_Mecanismos(TextHistory,imageHistory):
+    def interfaz_pedir_datos():
+        """
+        Interfaz de usuario para ingresar parámetros de cálculo para el perfil de levas.
+        Solo recopila datos y los devuelve.
+        """
+        def mostrar_resumen(matriz, tipos):
+            clear_screen()
+            print("\n--- Resumen de datos ingresados ---")
+            print("{:<10}{:<15}{:<15}{:<20}".format("Etapa", "Duración (s)", "Movimiento", "Altura (mm) / Tipo"))
+            print("-" * 60)
+            for i, (t, m, h, tp) in enumerate(zip(matriz[0], matriz[1], matriz[2], tipos)):
+                mov = ["Ascenso", "Plano", "Descenso"][m - 1]
+                curva = ["Lineal", "Armónica", "Cicloidal"][tp - 1] if m != 2 else "N/A"
+                print("{:<10}{:<15}{:<15}{:<20}".format(i + 1, t, mov, f"{h} / {curva}"))
+
+        def editar_dato(matriz, tipos):
+            clear_screen()
+            while True:
+                print("\n--- Edición de datos ---")
+                print("Seleccione una etapa para editar (0 para salir):")
+                etapa = CheckIOp(0, len(matriz[0]), "Número de etapa: ")
+                if etapa == 0:
+                    break
+
+                etapa -= 1  # Ajustar índice
+                print(f"\nEditando etapa {etapa + 1}:")
+                matriz[0][etapa] = CheckF("Duración de la etapa (s): ")
+                matriz[1][etapa] = CheckIOp(1, 3, "Tipo de movimiento (1: Ascenso, 2: Plano, 3: Descenso): ")
+                
+                if matriz[1][etapa] == 2:
+                    matriz[2][etapa] = 0
+                    tipos[etapa] = 1
+                else:
+                    matriz[2][etapa] = CheckF("Altura asociada (mm): ")
+                    tipos[etapa] = CheckIOp(1, 3, "Tipo de curva (1: Lineal, 2: Armónica, 3: Cicloidal): ")
+
+        clear_screen()
+        print("\n=== Parámetros de la leva ===")
+        
+        # Número de etapas
+        num_etapas = CheckF("Ingrese el número de etapas: ")
+
+        matriz_datos = [[], [], []]  # [tiempos, movimientos, alturas]
+        tipo_movimiento = []
+        
+        for i in range(int(num_etapas)):
+            clear_screen()
+            print("=" * 60)
+            print(f"\nEtapa {i + 1}")
+            
+            # Tiempo de la etapa
+            matriz_datos[0].append(CheckF("\tDuración de la etapa (s): "))
+            
+            # Tipo de movimiento (Ascenso, Plano, Descenso)
+            movimiento = CheckIOp(1, 3, "\tTipo de movimiento (1: Ascenso, 2: Plano, 3: Descenso): ")
+            matriz_datos[1].append(movimiento)
+            
+            if movimiento == 2:
+                matriz_datos[2].append(0)  # Altura es 0 para "Plano"
+                tipo_movimiento.append(1)  # Tipo predeterminado para plano
+            else:
+                # Altura asociada
+                matriz_datos[2].append(CheckF("\tAltura asociada (mm): "))
+                # Tipo de curva para cada etapa
+                tipo_movimiento.append(CheckIOp(1, 3, "\tTipo de curva (1: Lineal, 2: Armónica, 3: Cicloidal): "))
+
+        # Mostrar resumen de datos
+        clear_screen()
+        mostrar_resumen(matriz_datos, tipo_movimiento)
+        
+        # Opción para editar
+        while True:
+            #opcion = input("\n¿Desea editar algún dato? (s/n): ").strip().lower()
+            opcion = ask_continue("\n¿Desea editar algún dato? (s/n): ")
+            if opcion == True:
+                editar_dato(matriz_datos, tipo_movimiento)
+                clear_screen()
+                mostrar_resumen(matriz_datos, tipo_movimiento)
+            elif opcion == False:
+                break
+            else:
+                print("Opción inválida. Intente de nuevo.")
+        
+            # Retornar la matriz
+        return matriz_datos, tipo_movimiento
+
+
+    y = 1
+    flag = True
+    while flag == True:
+        datos ,tipo_movimiento = interfaz_pedir_datos()
+        print("\n--- Datos ingresados ---")
+        print(datos)
+
+        y = levas_table(datos,tipo_movimiento,100,y)
+        y += 1
+        a = CheckIOp(1,2,"Quiere hacer otra grafica? (1: Si  2: No)")
+
+        if a == 1:
+            flag = True
+        else:
+            flag = False
+    
+    return flag,TextHistory,imageHistory
+
 def Matematicas(TextHistory,imageHistory):
     clear_screen()
     flag = True
@@ -239,7 +348,8 @@ def main_menu():
     """
 
     clear_screen()
-    inputU = CheckIOp(1, 6,Style_Menu(["Sistemas Digitales","Probabilidad y estadística","Física","Control de Motores","Matematicas","Exit"]))
+    subject = ["Sistemas Digitales","Probabilidad y estadística","Física","Control de Motores","Matematicas","Cinematica de Mecanismos","Exit"]
+    inputU = CheckIOp(1, len(subject),Style_Menu(subject))
     
     return inputU
 
@@ -286,9 +396,15 @@ def main():
             hOpt,TextHistory,imageHistory = Matematicas(TextHistory,imageHistory)
         
         elif inputU == 6:
+            print(f"Cinematica_Mecanismos")
+            hOpt,TextHistory,imageHistory = Cinematica_Mecanismos(TextHistory,imageHistory)
+        
+        # Funcion de Salida
+        elif inputU == 7:
             flag = False
-
-        if hOpt and inputU != 6:
+        
+        # Continuar con el programa
+        if hOpt and inputU != 7:
             flag = Continue()
     clear_screen()
     print(TextHistory)

@@ -1,4 +1,3 @@
+from Meth_Num import *
 
-from ..Sistemas_Digitales import conversor_7_16_seg
-
-a = conversor_7_16_seg
+menu_Numeric("x-y+1",0,1,.1,0,1,3)

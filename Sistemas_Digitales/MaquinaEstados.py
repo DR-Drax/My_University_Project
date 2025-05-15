@@ -175,7 +175,7 @@ def create(number,binary_number):
 
     original_letter_map = create_binary_letter_map(original_list)
 
-    modified_letter_map = create_binary_letter_map(modified_list)
+    #modified_letter_map = create_binary_letter_map(modified_list)
 
     match_list = create_match_list(original_list, modified_list)
 

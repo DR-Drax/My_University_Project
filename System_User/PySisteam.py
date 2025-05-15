@@ -1,15 +1,15 @@
 import os
-import matplotlib.pyplot as plt
 import time
 import sys
 
-def Delay_Writer(texto, retraso=0.1):
+def Delay_Writer(texto, retraso=0.03):
     """
     Muestra texto como si se estuviera escribiendo letra por letra con un retraso.
     
     :param texto: El texto a mostrar.
     :param retraso: Tiempo en segundos entre cada carácter (por defecto 0.1s).
     """
+    texto +="\n"
     for letra in texto:
         sys.stdout.write(letra)  # Escribe un carácter sin salto de línea
         sys.stdout.flush()       # Asegura que se imprime inmediatamente
@@ -102,6 +102,30 @@ def Ascii_table(headers, data):
         print(print_row(row))  # Filas de datos
     print(draw_line("╚", "╩", "╝", "═"))  # Línea inferior
 
+def ask_continue(text = "¿Deseas continuar? (a) sí \n (b) no: "):
+    """
+    Pregunta al usuario si desea continuar, aceptando múltiples variantes de 'sí' y 'no'.
+
+    La entrada es interpretada de forma flexible para mejorar la experiencia del usuario.
+    Acepta opciones como:
+    - Para "sí": 'a', '1', 'si', 'sí', 's', 'y', 'yes'
+    - Para "no":  'b', '2', 'no', 'n'
+
+    Returns:
+        bool: True si el usuario desea continuar, False en caso contrario.
+    """
+    opciones_si = {"a", "1", "si", "sí", "s", "y", "yes"}
+    opciones_no = {"b", "2", "no", "n"}
+
+    while True:
+        respuesta = input(text).strip().lower()
+        if respuesta in opciones_si:
+            return True
+        elif respuesta in opciones_no:
+            return False
+        else:
+            print("Opción no válida. Intenta de nuevo.")
+            
 # Pendiente
 def dibujar_tabla_ascii(headers, data):
     """
