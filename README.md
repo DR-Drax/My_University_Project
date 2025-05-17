@@ -1,5 +1,4 @@
 # My_University_Project
-<<<<<<< HEAD
 Small pastime repo with utilities for university tasks and hobby projects while I learn Python libraries like SymPy, Matplotlib, and more. Work in progress: some features unfinished, others still need a user interface.
 =======
 *A personal collection of small Python utilities built to practice—and apply—concepts learned in class.*
